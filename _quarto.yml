@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "HRM LakeWatchers Analysis"
+  navbar:
+    right:
+      - href: index.qmd
+        text: Report
+      - href: https://github.com/vinura-amarasinghe/hrm-lakewatchers-analysis
+        text: GitHub
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    fig-width: 8
+    fig-height: 5
+    embed-resources: false

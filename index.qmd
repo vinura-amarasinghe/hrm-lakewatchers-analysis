@@ -1,0 +1,79 @@
+---
+title: "HRM LakeWatchers: Trends in Urban Lake Water Quality"
+subtitle: "Halifax Regional Municipality"
+author: "Vinura Jayowin Amarasinghe"
+date: today
+---
+
+## Introduction
+
+Halifax Regional Municipality manages an extensive network of urban lakes
+used for recreation, drinking water supply, and ecosystem services. Recent
+summers have seen repeated blue-green algae advisories at supervised
+beaches, raising questions about long-term trends in nutrient enrichment
+and warming.
+
+This analysis uses the open
+[HRM LakeWatchers dataset](https://doi.org/10.25976/85pw-zj92)
+on DataStream to examine multi-year trends in key water quality
+indicators.
+
+> **Note:** This report is currently a scaffold. The data fetch script is
+> in place but the analysis sections will be populated once the
+> DataStream API key arrives and the initial data exploration is complete.
+
+## Data
+
+```{r}
+#| label: setup
+#| message: false
+#| eval: false
+
+library(tidyverse)
+library(lubridate)
+library(Kendall)
+
+# Will load processed data once R/02_clean_data.R has been run
+# lakes <- read_csv("data/processed/lakewatchers_clean.csv")
+```
+
+## Site overview
+
+*Map of monitoring locations and summary of sites — to be added.*
+
+## Temperature trends
+
+*Time-series plots per lake, Mann-Kendall test, brief interpretation —
+to be added.*
+
+## Dissolved oxygen patterns
+
+*Box plots by lake and season; flag exceedances of relevant guidelines —
+to be added.*
+
+## Nutrient enrichment
+
+*Total phosphorus and chlorophyll-a trends; trophic-status classification —
+to be added.*
+
+## Discussion
+
+*Short — what the data shows, what the limitations are, what would be
+worth investigating further. To be added.*
+
+## Methods notes
+
+*Mann-Kendall justification, handling of detection limits, missing data
+treatment — to be added.*
+
+## Data citation
+
+> Halifax Regional Municipality (2025). HRM LakeWatchers (dataset). 2.0.0.
+> DataStream. https://doi.org/10.25976/85pw-zj92
+
+## Session info
+
+```{r}
+#| code-fold: true
+sessionInfo()
+```
