@@ -1,0 +1,8 @@
+git init
+git add .
+git commit -m "Initial project setup"
+
+git init
+git add .
+git commit -m "Initial project setup"
+
