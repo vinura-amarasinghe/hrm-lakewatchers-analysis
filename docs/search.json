@@ -1,0 +1,72 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "",
+    "text": "Halifax Regional Municipality manages dozens of urban lakes used for recreation, drinking water supply, and ecosystem services. In recent summers, HRM has issued repeated blue-green algae advisories at supervised lake beaches. This analysis uses the open HRM LakeWatchers dataset to examine seasonal patterns in key water quality indicators across 154 monitored lakes from 2022 to 2024.\nResearch questions:\n\nHow do water temperature, dissolved oxygen, and total phosphorus vary by season across HRM lakes?\nHow frequently do measurements exceed Canadian water quality guidelines?"
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "",
+    "text": "Halifax Regional Municipality manages dozens of urban lakes used for recreation, drinking water supply, and ecosystem services. In recent summers, HRM has issued repeated blue-green algae advisories at supervised lake beaches. This analysis uses the open HRM LakeWatchers dataset to examine seasonal patterns in key water quality indicators across 154 monitored lakes from 2022 to 2024.\nResearch questions:\n\nHow do water temperature, dissolved oxygen, and total phosphorus vary by season across HRM lakes?\nHow frequently do measurements exceed Canadian water quality guidelines?"
+  },
+  {
+    "objectID": "index.html#data",
+    "href": "index.html#data",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Data",
+    "text": "Data\n\n\nCode\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(knitr)\n\ndf &lt;- read_csv(\"data/processed/lakewatchers_clean.csv\",\n               show_col_types = FALSE)\n\n\nThe dataset contains 34445 observations across 154 monitoring locations, spanning 2022-04-25 to 2024-09-12.\n\n\nCode\ndf %&gt;%\n  group_by(Parameter) %&gt;%\n  summarise(N = n(), Locations = n_distinct(LocationId)) %&gt;%\n  arrange(desc(N)) %&gt;%\n  kable()\n\n\n\n\nTable 1: Observations per parameter\n\n\n\n\n\n\nParameter\nN\nLocations\n\n\n\n\nDO_mgL\n9929\n154\n\n\nTemp_C\n9924\n154\n\n\npH\n9888\n154\n\n\nChla_mgL\n2625\n154\n\n\nTP_mgL\n1185\n154\n\n\nSecchi_m\n448\n78\n\n\nEcoli_cfu\n446\n149"
+  },
+  {
+    "objectID": "index.html#water-temperature",
+    "href": "index.html#water-temperature",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Water Temperature",
+    "text": "Water Temperature\n\n\nCode\nknitr::include_graphics(\"outputs/figures/01_temperature_seasonal.png\")\n\n\n\n\n\n\n\n\nFigure 1: Water temperature by season and year.\n\n\n\n\n\nSummer surface temperatures range from roughly 10°C to over 30°C, with medians around 18–22°C — warm enough to support blue-green algal growth. Seasonal patterns are consistent across all three years."
+  },
+  {
+    "objectID": "index.html#dissolved-oxygen",
+    "href": "index.html#dissolved-oxygen",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Dissolved Oxygen",
+    "text": "Dissolved Oxygen\n\n\nCode\nknitr::include_graphics(\"outputs/figures/02_dissolved_oxygen_seasonal.png\")\n\n\n\n\n\n\n\n\nFigure 2: Dissolved oxygen by season and year. Red line = 6.5 mg/L CCME guideline.\n\n\n\n\n\n\n\nCode\ndf %&gt;%\n  filter(Parameter == \"DO_mgL\", Season != \"Winter\") %&gt;%\n  mutate(below = ResultValue &lt; 6.5) %&gt;%\n  group_by(Year, Season) %&gt;%\n  summarise(Total = n(), Below = sum(below, na.rm = TRUE),\n            Pct = round(100 * Below / Total, 1), .groups = \"drop\") %&gt;%\n  kable(col.names = c(\"Year\",\"Season\",\"Total\",\"Below 6.5 mg/L\",\"%\"))\n\n\n\n\nTable 2: DO exceedances below 6.5 mg/L\n\n\n\n\n\n\nYear\nSeason\nTotal\nBelow 6.5 mg/L\n%\n\n\n\n\n2022\nFall\n89\n59\n66.3\n\n\n2022\nSpring\n1925\n42\n2.2\n\n\n2022\nSummer\n1880\n827\n44.0\n\n\n2023\nFall\n16\n3\n18.8\n\n\n2023\nSpring\n1984\n40\n2.0\n\n\n2023\nSummer\n2006\n1107\n55.2\n\n\n2024\nFall\n118\n29\n24.6\n\n\n2024\nSpring\n948\n34\n3.6\n\n\n2024\nSummer\n963\n480\n49.8\n\n\n\n\n\n\n\n\nSummer dissolved oxygen consistently falls below the 6.5 mg/L cold-water aquatic life threshold across all three years, consistent with warm-season thermal stratification."
+  },
+  {
+    "objectID": "index.html#total-phosphorus",
+    "href": "index.html#total-phosphorus",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Total Phosphorus",
+    "text": "Total Phosphorus\n\n\nCode\nknitr::include_graphics(\"outputs/figures/03_total_phosphorus_seasonal.png\")\n\n\n\n\n\n\n\n\nFigure 3: Total phosphorus by season and year (log scale). Red line = 0.01 mg/L CCME guideline.\n\n\n\n\n\nMedian TP values sit near the CCME sensitive-lake threshold of 0.01 mg/L, placing many HRM lakes in a transitional trophic state."
+  },
+  {
+    "objectID": "index.html#discussion",
+    "href": "index.html#discussion",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Discussion",
+    "text": "Discussion\nHRM lakes show consistent summer dissolved oxygen depletion and phosphorus levels at the boundary of eutrophication guidelines. These patterns are stable across 2022–2024, suggesting structural nutrient loading rather than isolated events.\nLimitation: 2.5 years is insufficient for trend detection. Depth-stratified sampling would strengthen interpretation of DO values."
+  },
+  {
+    "objectID": "index.html#methods",
+    "href": "index.html#methods",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Methods",
+    "text": "Methods\nData retrieved via the DataStream API (datastreamr v2.0.1). Filtered to 7 parameters; removed missing values and implausible readings (temp &gt; 40°C). Sites with fewer than 5 observations per parameter or fewer than 3 parameters measured were excluded, leaving 154 sites and 34,446 observations."
+  },
+  {
+    "objectID": "index.html#data-citation",
+    "href": "index.html#data-citation",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Data citation",
+    "text": "Data citation\n\nHalifax Regional Municipality (2025). HRM LakeWatchers (dataset). 2.0.0. DataStream. https://doi.org/10.25976/85pw-zj92"
+  },
+  {
+    "objectID": "index.html#session-info",
+    "href": "index.html#session-info",
+    "title": "HRM LakeWatchers: Water Quality Across Halifax Lakes",
+    "section": "Session info",
+    "text": "Session info\n\n\nCode\nsessionInfo()\n\n\nR version 4.6.0 (2026-04-24)\nPlatform: aarch64-apple-darwin23\nRunning under: macOS Sequoia 15.0\n\nMatrix products: default\nBLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib \nLAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1\n\nlocale:\n[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8\n\ntime zone: America/Halifax\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices datasets  utils     methods   base     \n\nother attached packages:\n [1] knitr_1.51      lubridate_1.9.5 forcats_1.0.1   stringr_1.6.0  \n [5] dplyr_1.2.1     purrr_1.2.2     readr_2.2.0     tidyr_1.3.2    \n [9] tibble_3.3.1    ggplot2_4.0.3   tidyverse_2.0.0\n\nloaded via a namespace (and not attached):\n [1] bit_4.6.0          gtable_0.3.6       jsonlite_2.0.0     crayon_1.5.3      \n [5] compiler_4.6.0     renv_1.2.3         tidyselect_1.2.1   parallel_4.6.0    \n [9] scales_1.4.0       yaml_2.3.12        fastmap_1.2.0      R6_2.6.1          \n[13] generics_0.1.4     pillar_1.11.1      RColorBrewer_1.1-3 tzdb_0.5.0        \n[17] rlang_1.2.0        stringi_1.8.7      xfun_0.57          S7_0.2.2          \n[21] bit64_4.8.2        timechange_0.4.0   cli_3.6.6          withr_3.0.2       \n[25] magrittr_2.0.5     digest_0.6.39      grid_4.6.0         vroom_1.7.1       \n[29] rstudioapi_0.18.0  hms_1.1.4          lifecycle_1.0.5    vctrs_0.7.3       \n[33] evaluate_1.0.5     glue_1.8.1         farver_2.1.2       rmarkdown_2.31    \n[37] tools_4.6.0        pkgconfig_2.0.3    htmltools_0.5.9"
+  }
+]

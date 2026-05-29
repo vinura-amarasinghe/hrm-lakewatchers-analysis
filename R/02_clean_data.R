@@ -50,6 +50,8 @@ clean <- raw %>%
   ) %>%
   # Remove NAs in value or date
   filter(!is.na(ResultValue), !is.na(Date)) %>%
+  # Remove physically impossible values
+  filter(!(Parameter == "Temp_C" & ResultValue > 40)) %>%
   # Select columns we need
   select(
     LocationId, Date, Year, Month, Season,
