@@ -1,47 +1,26 @@
 # 01_fetch_data.R
-# Pull HRM LakeWatchers data from the DataStream API.
-#
-# Prerequisites:
-#   - DATASTREAM_API_KEY set in ~/.Renviron (use usethis::edit_r_environ())
-#   - datastreamr installed: remotes::install_github("datastreamapp/datastreamr")
+# Pull HRM LakeWatchers data from DataStream API
+# Requires: DATASTREAM_API_KEY in .Renviron
+# Run usethis::edit_r_environ() to set it
 
 library(datastreamr)
-library(dplyr)
 library(readr)
-library(here)
 
-# HRM LakeWatchers DOI (v2.0.0)
-hrm_doi <- "10.25976/85pw-zj92"
+# Set API key from environment (never hardcode it)
+setAPIKey(Sys.getenv("DATASTREAM_API_KEY"))
 
-# Query: pull all observations with location metadata via /Records
-# /Records is preferred over /Observations here because it joins
-# monitoring-location info to each row in a single call.
+# ---- Query ----
+# DOI for HRM LakeWatchers v2.0.0
 qs <- list(
-  `$select` = paste(
-    "DOI", "DatasetName",
-    "MonitoringLocationName",
-    "MonitoringLocationLatitude", "MonitoringLocationLongitude",
-    "MonitoringLocationType",
-    "ActivityStartDate", "ActivityStartTime",
-    "ActivityDepthHeightMeasure", "ActivityDepthHeightUnit",
-    "CharacteristicName",
-    "ResultSampleFraction",
-    "ResultValue", "ResultUnit",
-    "ResultDetectionCondition",
-    "ResultDetectionQuantitationLimitMeasure",
-    "ResultDetectionQuantitationLimitUnit",
-    sep = ","
-  ),
-  `$filter` = sprintf("DOI eq '%s'", hrm_doi),
-  `$top` = 10000
+  `$filter` = "DOI eq '10.25976/85pw-zj92'"
 )
 
-message("Querying DataStream API for HRM LakeWatchers...")
-raw <- records(qs)
-message("Pulled ", nrow(raw), " records.")
+message("Fetching data from DataStream API...")
+raw <- observations(qs)
+message("Pulled ", nrow(raw), " observations across ", 
+        length(unique(raw$LocationId)), " locations")
 
-# Cache locally (data/raw/ is gitignored)
-dir.create(here("data", "raw"), recursive = TRUE, showWarnings = FALSE)
-out_path <- here("data", "raw", "hrm_lakewatchers_raw.csv")
-write_csv(raw, out_path)
-message("Saved to ", out_path)
+# ---- Cache locally ----
+dir.create("data/raw", recursive = TRUE, showWarnings = FALSE)
+write_csv(raw, "data/raw/hrm_lakewatchers_raw.csv")
+message("Saved to data/raw/hrm_lakewatchers_raw.csv")
