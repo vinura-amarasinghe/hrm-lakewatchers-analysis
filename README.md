@@ -5,7 +5,7 @@
 
 **Author:** Vinura Jayowin Amarasinghe
 **Status:** In progress
-**Report:** *Will be published to GitHub Pages once analysis is complete.*
+**Report:** https://vinura-amarasinghe.github.io/hrm-lakewatchers-analysis/
 
 ---
 
@@ -72,8 +72,20 @@ https://datastream.org. Save it as `DATASTREAM_API_KEY` in your
 
 ## Key findings
 
-*To be added once analysis is complete.*
+- **Summer dissolved oxygen depletion is the most consistent signal in the dataset.**
+  Across all three years (2022–2024), a substantial proportion of summer DO readings
+  fall below the CCME cold-water aquatic life threshold of 6.5 mg/L, consistent with
+  warm-season thermal stratification across HRM lakes.
 
+- **Total phosphorus levels sit at the boundary of eutrophication guidelines.**
+  Median TP values across monitored lakes hover near the CCME sensitive-lake threshold
+  of 0.01 mg/L, with summer medians frequently at or above this level — indicating
+  ongoing nutrient pressure from urban stormwater and internal loading.
+
+- **Water temperatures are seasonally consistent across the 2022–2024 record.**
+  Summer surface temperatures typically range from 15–25°C, warm enough to support
+  blue-green algal growth when combined with elevated phosphorus. No dramatic
+  year-over-year warming signal is detectable in this short record.
 ## Tools
 
 R · tidyverse · datastreamr · Kendall · sf · tmap · Quarto · renv
